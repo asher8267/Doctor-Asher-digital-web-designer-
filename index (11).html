@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Asher – Digital Web Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050a14;
+    font-family: 'Raleway', sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  canvas#particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #ad {
+    position: relative;
+    z-index: 1;
+    width: 780px;
+    height: 480px;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1a0a2e 50%, #0d1b2a 100%);
+    border: 1px solid rgba(180, 130, 255, 0.25);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 80px rgba(160, 80, 255, 0.25), 0 0 200px rgba(50, 100, 255, 0.1);
+  }
+
+  #ad::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 20px;
+    background: conic-gradient(from var(--angle,0deg), #7c3aed, #2563eb, #06b6d4, #7c3aed);
+    z-index: -1;
+    animation: spin 4s linear infinite;
+  }
+  @property --angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+  @keyframes spin { to { --angle: 360deg; } }
+
+  .layer {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* SCENE 1 */
+  #s1 { gap: 12px; }
+  #s1 .pre {
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #7dd3fc;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  #s1 h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 58px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  #s1 h1 span { color: #a78bfa; }
+  #s1 .tag {
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  /* SCENE 2 */
+  #s2 { gap: 24px; }
+  #s2 h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: #e2e8f0;
+    opacity: 0;
+    text-align: center;
+  }
+  .skills {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .skill-pill {
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(30px);
+    border: 1px solid;
+  }
+  .skill-pill:nth-child(1) { color: #67e8f9; border-color: #67e8f9; background: rgba(6,182,212,.1); }
+  .skill-pill:nth-child(2) { color: #c084fc; border-color: #c084fc; background: rgba(168,85,247,.1); }
+  .skill-pill:nth-child(3) { color: #86efac; border-color: #86efac; background: rgba(34,197,94,.1); }
+  .skill-pill:nth-child(4) { color: #fda4af; border-color: #fda4af; background: rgba(244,63,94,.1); }
+  .skill-pill:nth-child(5) { color: #fcd34d; border-color: #fcd34d; background: rgba(234,179,8,.1); }
+
+  /* SCENE 3 */
+  #s3 { gap: 20px; }
+  #s3 .big {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(40px);
+    line-height: 1.2;
+  }
+  #s3 .big em { color: #a78bfa; font-style: normal; }
+  #s3 .sub {
+    font-size: 15px;
+    color: #94a3b8;
+    letter-spacing: 2px;
+    opacity: 0;
+  }
+  #s3 .btn {
+    margin-top: 10px;
+    padding: 14px 40px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #7c3aed, #2563eb);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    box-shadow: 0 0 30px rgba(124,58,237,0.5);
+    position: relative;
+    pointer-events: all;
+  }
+  #s3 .btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  #s3 .btn:hover::after { opacity: 1; }
+
+  /* Progress bar */
+  #progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #7c3aed, #06b6d4);
+    width: 0%;
+    transition: width 0.1s linear;
+    z-index: 5;
+  }
+
+  /* Replay button */
+  #replay {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50px;
+    padding: 6px 16px;
+    color: #94a3b8;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: none;
+    z-index: 10;
+  }
+  #replay:hover { background: rgba(255,255,255,0.15); color: #fff; }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div id="ad">
+  <div id="progress"></div>
+  <button id="replay">↺ Replay</button>
+
+  <!-- Scene 1 -->
+  <div class="layer" id="s1">
+    <div class="pre">Introducing</div>
+    <h1>Doctor <span>Asher</span></h1>
+    <div class="tag">Digital Web Designer</div>
+  </div>
+
+  <!-- Scene 2 -->
+  <div class="layer" id="s2">
+    <h2>What I Create For You</h2>
+    <div class="skills">
+      <div class="skill-pill">UI Design</div>
+      <div class="skill-pill">Web Development</div>
+      <div class="skill-pill">Branding</div>
+      <div class="skill-pill">Landing Pages</div>
+      <div class="skill-pill">E-Commerce</div>
+    </div>
+  </div>
+
+  <!-- Scene 3 -->
+  <div class="layer" id="s3">
+    <div class="big">Your Vision.<br><em>Beautifully Built.</em></div>
+    <div class="sub">Let's design something extraordinary.</div>
+    <button class="btn">Work With Doctor Asher</button>
+  </div>
+</div>
+
+<script>
+// ── Particle Canvas ──
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const dots = Array.from({length:80}, () => ({
+  x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+  r: Math.random()*1.5+0.5, vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3,
+  a: Math.random()
+}));
+function drawParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  dots.forEach(d => {
+    d.x += d.vx; d.y += d.vy;
+    if(d.x<0||d.x>canvas.width) d.vx*=-1;
+    if(d.y<0||d.y>canvas.height) d.vy*=-1;
+    ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(167,139,250,${d.a*0.6})`; ctx.fill();
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ── Audio ──
+const AC = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTone(freq, type='sine', dur=0.3, vol=0.15, delay=0) {
+  const osc = AC.createOscillator();
+  const gain = AC.createGain();
+  osc.connect(gain); gain.connect(AC.destination);
+  osc.type = type; osc.frequency.value = freq;
+  const t = AC.currentTime + delay;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(vol, t+0.02);
+  gain.gain.linearRampToValueAtTime(0, t+dur);
+  osc.start(t); osc.stop(t+dur+0.1);
+}
+
+function playWhoosh(delay=0) {
+  const buf = AC.createBuffer(1, AC.sampleRate*0.5, AC.sampleRate);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);
+  const src = AC.createBufferSource();
+  const f = AC.createBiquadFilter(); f.type='bandpass'; f.frequency.value=800;
+  const g = AC.createGain(); g.gain.value = 0.2;
+  src.buffer=buf; src.connect(f); f.connect(g); g.connect(AC.destination);
+  src.start(AC.currentTime+delay);
+}
+
+function playChime(delay=0) {
+  [523,659,784,1047].forEach((f,i)=>playTone(f,'sine',0.5,0.12,delay+i*0.12));
+}
+
+function playSuccess(delay=0) {
+  [392,523,659,784,1047].forEach((f,i)=>playTone(f,'triangle',0.4,0.1,delay+i*0.09));
+}
+
+function playDrum(delay=0) {
+  const buf = AC.createBuffer(1, AC.sampleRate*0.3, AC.sampleRate);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3);
+  const src = AC.createBufferSource();
+  const g = AC.createGain(); g.gain.value=0.4;
+  src.buffer=buf; src.connect(g); g.connect(AC.destination);
+  src.start(AC.currentTime+delay);
+}
+
+// ── Animation Helpers ──
+function animate(el, props, duration, delay=0, easing='cubic-bezier(.23,1,.32,1)') {
+  return new Promise(res => {
+    setTimeout(() => {
+      el.style.transition = `all ${duration}ms ${easing}`;
+      Object.assign(el.style, props);
+      setTimeout(res, duration);
+    }, delay);
+  });
+}
+
+function fadeIn(el, d=600, delay=0) {
+  return animate(el, {opacity:'1', transform:'none'}, d, delay);
+}
+
+function fadeOut(el, d=400, delay=0) {
+  return new Promise(res => {
+    setTimeout(()=>{
+      el.style.transition = `all ${d}ms ease`;
+      el.style.opacity = '0';
+      el.style.transform = 'scale(1.05)';
+      setTimeout(res, d);
+    }, delay);
+  });
+}
+
+function showLayer(id) {
+  document.getElementById(id).style.opacity = '1';
+  document.getElementById(id).style.pointerEvents = 'auto';
+}
+function hideLayer(id) {
+  document.getElementById(id).style.opacity = '0';
+  document.getElementById(id).style.pointerEvents = 'none';
+}
+
+// ── Progress Bar ──
+let progressInterval;
+function startProgress(totalMs) {
+  const bar = document.getElementById('progress');
+  bar.style.width = '0%';
+  const step = 100 / (totalMs / 100);
+  let pct = 0;
+  progressInterval = setInterval(() => {
+    pct += step; if(pct>=100) { pct=100; clearInterval(progressInterval); }
+    bar.style.width = pct + '%';
+  }, 100);
+}
+
+// ── Main Ad Sequence ──
+async function startAd() {
+  AC.resume();
+  document.getElementById('replay').style.display = 'none';
+  clearInterval(progressInterval);
+
+  const TOTAL = 10500;
+  startProgress(TOTAL);
+
+  // SCENE 1
+  showLayer('s1');
+  playWhoosh(0);
+  playTone(220,'sine',0.6,0.1,0.1);
+
+  const pre = document.querySelector('#s1 .pre');
+  const h1  = document.querySelector('#s1 h1');
+  const tag = document.querySelector('#s1 .tag');
+
+  await fadeIn(pre, 700, 200);
+  playChime(0);
+  await new Promise(r=>setTimeout(r,200));
+  await fadeIn(h1, 900, 0);
+  playTone(440,'triangle',0.8,0.12,0);
+  playTone(550,'triangle',0.8,0.1,0.15);
+  await fadeIn(tag, 600, 300);
+  await new Promise(r=>setTimeout(r,2000));
+
+  playWhoosh(0);
+  await Promise.all([fadeOut(pre,300,0), fadeOut(h1,400,50), fadeOut(tag,300,100)]);
+  await new Promise(r=>setTimeout(r,200));
+  hideLayer('s1');
+
+  // SCENE 2
+  showLayer('s2');
+  const h2   = document.querySelector('#s2 h2');
+  const pills = document.querySelectorAll('.skill-pill');
+
+  playTone(330,'sine',0.4,0.1,0);
+  await fadeIn(h2, 600, 100);
+
+  for(let i=0;i<pills.length;i++){
+    playTone([261,329,392,523,659][i],'triangle',0.3,0.1,0);
+    await fadeIn(pills[i], 400, 0);
+    await new Promise(r=>setTimeout(r,100));
+  }
+
+  await new Promise(r=>setTimeout(r,2200));
+  playWhoosh(0);
+  await Promise.all([fadeOut(h2,300,0), ...[...pills].map((p,i)=>fadeOut(p,300,i*60))]);
+  await new Promise(r=>setTimeout(r,200));
+  hideLayer('s2');
+
+  // SCENE 3
+  showLayer('s3');
+  const big = document.querySelector('#s3 .big');
+  const sub = document.querySelector('#s3 .sub');
+  const btn = document.querySelector('#s3 .btn');
+
+  playDrum(0); playDrum(0.05); playTone(196,'sawtooth',0.3,0.07,0);
+  await fadeIn(big, 800, 100);
+  playSuccess(0.3);
+  await fadeIn(sub, 600, 400);
+  await fadeIn(btn, 700, 600);
+  playChime(0.6);
+
+  setTimeout(()=>{ document.getElementById('replay').style.display='block'; }, 2000);
+}
+
+// ── Replay ──
+document.getElementById('replay').onclick = () => {
+  ['s1','s2','s3'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.style.opacity='0'; el.style.pointerEvents='none';
+    el.querySelectorAll('.pre,.tag,h1,h2,.skill-pill,.big,.sub,.btn').forEach(c=>{
+      c.style.transition='none'; c.style.opacity='0';
+      if(c.classList.contains('skill-pill')||c.classList.contains('pre')||c.classList.contains('tag')) {
+        c.style.transform='translateY(30px)';
+      } else if(c.tagName==='H1') { c.style.transform='scale(0.7)'; }
+      else if(c.classList.contains('big')) { c.style.transform='translateY(40px)'; }
+      else if(c.classList.contains('btn')) { c.style.transform='scale(0.8)'; }
+      else { c.style.transform=''; }
+    });
+  });
+  document.getElementById('replay').style.display='none';
+  document.getElementById('progress').style.width='0%';
+  setTimeout(startAd, 100);
+};
+
+// ── AUTO-PLAY on page load ──
+window.addEventListener('load', () => {
+  setTimeout(startAd, 400);
+});
+</script>
+</body>
+</html>
